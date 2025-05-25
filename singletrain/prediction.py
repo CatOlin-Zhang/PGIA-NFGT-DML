@@ -1,0 +1,16 @@
+import pandas as pd
+from data_preprocessing import inverse_log_transform
+
+def predict_and_submit(model, test_data, submission_path, preprocessor):
+    test_data['TotalSF'] = test_data['TotalBsmtSF'] + test_data['1stFlrSF'] + test_data['2ndFlrSF']
+    X_test = test_data.drop(['Id'], axis=1)
+    X_test_processed = preprocessor.transform(X_test)
+    if hasattr(X_test_processed, "toarray"):
+        X_test_processed = X_test_processed.toarray()
+    test_predictions_log = model.forward(X_test_processed).flatten()
+    test_predictions = inverse_log_transform(test_predictions_log)
+    submission_df = pd.DataFrame({'Id': test_data['Id'], 'SalePrice': test_predictions})
+    submission_df.to_csv(submission_path, index=False)
+
+
+
