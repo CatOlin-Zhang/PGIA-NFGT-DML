@@ -58,6 +58,8 @@ def main():
     output_size = 1
     global_model = MLPModel(input_size, hidden_sizes, output_size)
 
+
+
     # 训练模型
     epochs = 100
     learning_rate = 0.0001
